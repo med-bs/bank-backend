@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.pfe.bankbackend.dtos.*;
 import org.pfe.bankbackend.entities.*;
+import org.pfe.bankbackend.enums.AccountStatus;
 import org.pfe.bankbackend.enums.OperationType;
 import org.pfe.bankbackend.exceptions.BalanceNotSufficientException;
 import org.pfe.bankbackend.exceptions.BankAccountNotFoundException;
@@ -52,6 +53,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         currentAccount.setBalance(initialBalance);
         currentAccount.setOverDraft(overDraft);
         currentAccount.setClient(client);
+        currentAccount.setStatus(AccountStatus.CREATED);
         CurrentAccount savedBankAccount = bankAccountRepository.save(currentAccount);
         return dtoMapper.fromCurrentBankAccount(savedBankAccount);
     }
@@ -67,6 +69,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         savingAccount.setBalance(initialBalance);
         savingAccount.setInterestRate(interestRate);
         savingAccount.setClient(client);
+        savingAccount.setStatus(AccountStatus.CREATED);
         SavingAccount savedBankAccount = bankAccountRepository.save(savingAccount);
         return dtoMapper.fromSavingBankAccount(savedBankAccount);
     }
