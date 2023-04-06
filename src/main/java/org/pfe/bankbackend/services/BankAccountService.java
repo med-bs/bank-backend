@@ -17,6 +17,7 @@ public interface BankAccountService {
     List<ClientDTO> listClients();
 
     BankAccountDTO getBankAccount(String accountId) throws BankAccountNotFoundException;
+    BankAccountDTO getClientBankAccount(String accountId, Long clientId) throws BankAccountNotFoundException, ClientNotFoundException;
 
     void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
@@ -25,7 +26,7 @@ public interface BankAccountService {
     void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
     List<BankAccountDTO> bankAccountList();
-
+    List<BankAccountDTO> bankAccountClientList(Long clientId) throws ClientNotFoundException;
     ClientDTO getClient(Long clientId) throws ClientNotFoundException;
 
     ClientDTO updateClient(ClientDTO clientDTO);
@@ -35,6 +36,7 @@ public interface BankAccountService {
     List<AccountOperationDTO> accountHistory(String accountId);
 
     AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
+    AccountHistoryDTO getClientAccountHistory(String accountId,Long clientId, int page, int size) throws BankAccountNotFoundException, ClientNotFoundException;
 
     List<ClientDTO> searchClients(String keyword);
 }
