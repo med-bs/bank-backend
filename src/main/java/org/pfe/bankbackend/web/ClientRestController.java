@@ -25,8 +25,8 @@ public class ClientRestController {
         return bankAccountService.searchClients("%"+keyword+"%");
     }
     @GetMapping("/clients/{id}")
-    public ClientDTO getClient(@PathVariable(name = "id") Long clientId) throws ClientNotFoundException {
-        return bankAccountService.getClient(clientId);
+    public ClientDTO getClient(@PathVariable Long id) throws ClientNotFoundException {
+        return bankAccountService.getClient(id);
     }
     @PostMapping("/clients")
     public ClientDTO saveClient(@RequestBody ClientDTO clientDTO){

@@ -36,6 +36,17 @@ public class BankAccountRestAPI {
     public List<BankAccountDTO> listAccounts(){
         return bankAccountService.bankAccountList();
     }
+
+    @GetMapping("/clients/{clientId}/accounts")
+    public List<BankAccountDTO> listClientAccounts(@PathVariable Long clientId) throws ClientNotFoundException {
+        return bankAccountService.bankAccountClientList(clientId);
+    }
+
+    @GetMapping("/clients/{clientId}/accounts/{accountId}")
+    public BankAccountDTO getClientBankAccount(@PathVariable Long clientId,@PathVariable String accountId) throws BankAccountNotFoundException, ClientNotFoundException {
+        return bankAccountService.getClientBankAccount(accountId,clientId);
+    }
+
     @GetMapping("/accounts/{accountId}/operations")
     public List<AccountOperationDTO> getHistory(@PathVariable String accountId){
         return bankAccountService.accountHistory(accountId);
@@ -48,6 +59,14 @@ public class BankAccountRestAPI {
             @RequestParam(name="size",defaultValue = "5")int size) throws BankAccountNotFoundException {
         return bankAccountService.getAccountHistory(accountId,page,size);
     }
+    @GetMapping("/clients/{clientId}/accounts/{accountId}/pageOperations")
+    public AccountHistoryDTO getClientAccountHistory(
+            @PathVariable String accountId,
+            @PathVariable Long clientId,
+            @RequestParam(name="page",defaultValue = "0") int page,
+            @RequestParam(name="size",defaultValue = "5")int size) throws BankAccountNotFoundException, ClientNotFoundException {
+        return bankAccountService.getClientAccountHistory(accountId,clientId,page,size);
+    }
     @PostMapping("/accounts/debit")
     public DebitDTO debit(@RequestBody DebitDTO debitDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
         this.bankAccountService.debit(debitDTO.getAccountId(),debitDTO.getAmount(),debitDTO.getDescription());
@@ -59,11 +78,12 @@ public class BankAccountRestAPI {
         return creditDTO;
     }
     @PostMapping("/accounts/transfer")
-    public void transfer(@RequestBody TransferRequestDTO transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
+    public TransferRequestDTO transfer(@RequestBody TransferRequestDTO transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
         this.bankAccountService.transfer(
                 transferRequestDTO.getAccountSource(),
                 transferRequestDTO.getAccountDestination(),
                 transferRequestDTO.getAmount());
+        return transferRequestDTO;
     }
 }
 
